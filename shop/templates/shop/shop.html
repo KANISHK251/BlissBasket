@@ -1,0 +1,138 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %} BlissBasket {% endblock %}
+
+{% block css %}
+<style>
+
+        .container{
+          background-color:rgb(232, 238, 246);   
+        }
+         .category-title {
+         font-weight: bold;
+         font-size: 2em; /* Adjust the size as needed */
+         margin-top: 20px;
+         }
+         .card-price {
+         font-size: 1em;
+         color: #ea5c3c; /* Adjust the color as needed */
+          }
+
+          .col-md-3
+          {
+          display: inline-block;
+          margin-left:-4px;
+          }
+
+
+          .carousel-indicators .active {
+          background-color: blue;
+            }
+
+          .col-md-3 img{
+
+          width: 17em;
+          height: 17em;
+          }
+
+          .carousel-indicator li{
+          background-color: blue;
+          }
+
+          .carousel-indicators{
+          bottom: 0;
+          }
+
+          .carousel-control-prev-icon,
+          .carousel-control-next-icon{
+          background-color: rgb(128, 148, 208);
+
+          }
+
+          .carousel-control-next,
+          .carousel-control-prev{
+            height: 300px;
+          }
+
+          .no-padding{
+           padding-left: 0;
+           padding-right: 0;
+           }
+           
+          .card-button{
+           padding-left: 10rem;
+
+          }
+           .carousel-control-next{
+            color: black;
+           }
+           .card-body{
+            height: 11rem;
+           }
+           .custom-tooltip {
+            background-color: rgb(236, 245, 248) !important;
+            color: rgb(43, 23, 175) !important;
+           }
+</style>
+ {% endblock %}
+
+{% block body %}
+
+{% load static %}
+
+<div class="container">
+  {% for item in context %}
+    <h2 class="category-title">{{ item.category }}</h2>
+    <div id="demo{{ forloop.counter }}" class="carousel slide my-3" data-bs-ride="carousel">
+    <ul class="carousel-indicators">
+      <li data-bs-target="#demo{{ forloop.counter }}" data-bs-slide-to="0" class="active"></li>
+      {% for i in item.range %}
+      <li data-bs-target="#demo{{ forloop.counter }}" data-bs-slide-to="{{ i }}" ></li>
+      {% endfor %}
+    </ul>
+    
+    <!--Slideshow starts here -->
+    <div class="carousel-inner">
+      {% for i in item.product %}
+      {% if forloop.first %}
+      <div class="carousel-item active">
+      {% elif forloop.counter0|divisibleby:4 %}
+      <div class="carousel-item">
+      {% endif %}
+      <div class="col-xs-3 col-sm-3 col-md-3 ">
+          <div class="card align-items-center">
+            <img src='/media/{{i.image}}' class="card-img-top" alt="...">
+            <div class="card-body">
+                <h3 class="card-title ">{{i.product_name}}</h3>
+                <p class="card-price">Price: ₹{{i.price}}</p>
+                <p class="card-text">{{i.desc}}</p> 
+            </div>
+            <div class="d-flex justify-content-between w-80">
+              <a href="{% url 'add_to_cart' i.id %}" class="btn btn-primary" type="button">Add to Cart</a>
+              <a href="{% url 'buy_now' i.id %}" class="btn btn-primary" type="button">Buy Now</a>
+            </div>
+          </div>
+      </div>
+       {% if forloop.counter0|add:1|divisibleby:4 or forloop.last %}
+      </div>
+       {% endif %}
+      {% endfor %}
+    </div>
+  
+    <a class="carousel-control-prev" href="#demo{{ forloop.counter }}" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#demo{{ forloop.counter }}" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+
+
+
+
+
