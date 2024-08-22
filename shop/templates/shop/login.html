@@ -85,6 +85,11 @@ button {
             <h2>Log into account</h2>
             <small class="mb-3"><code style="font-size:78.5% !important;">Use your credentials to access your
                 account</code></small>
+            {% if error %}
+              <div class="alert alert-danger" role="alert">
+                {{ error }}
+              </div>
+            {% endif %}
             <form action="login" method="POST"> {% csrf_token %}
                 <div class="form-group mt-3">
                     <label for="email" style="background: orange; padding:5px;color:white !important;">Email address</label>

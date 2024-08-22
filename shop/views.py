@@ -94,20 +94,24 @@ def contacts(request):
                         '''.format(reverse('shop')))
 
 def login_view(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
 
         user = authenticate(request,email=email,password=password)
 
-        if user is None:
+        if user is not None:
+            login(request, user, backend="shop.backends.EmailBackend")
+            return redirect('shop')
+
+        else:
+            if User.objects.filter(email=email).exists():
+                return render(request, 'shop/login.html', {'error': 'Invalid Credentials'})
             user=User.objects.create(
                 email=email,
                 username = email.split('@')[0],
                 password=make_password(password),  
                 )
-
-        if user is not None:
             login(request, user, backend="shop.backends.EmailBackend")
             return redirect('shop')
                      
