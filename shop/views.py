@@ -15,6 +15,7 @@ def index(request):
     return render(request, 'shop/index.html')
 
 
+@login_required
 def shop(request):
     categories = ["Men's Fashion","Electronics","Kid's Fashion"]
     context = []
@@ -30,7 +31,7 @@ def shop(request):
     return render(request,'shop/shop.html',allprod)
 
 
-
+@login_required
 def add_to_cart(request,product_id):
     product = get_object_or_404(Product,id=product_id)
     cart,created = Cart.objects.get_or_create(user=request.user)
@@ -45,7 +46,7 @@ def add_to_cart(request,product_id):
         
     return redirect('cart')
 
-
+@login_required
 def cart(request):
     cart,created = Cart.objects.get_or_create(user=request.user)
     items = cart.items.all()
@@ -55,7 +56,7 @@ def cart(request):
     return render(request,'shop/cart.html', context)
 
 
-
+@login_required
 def remove_cart(request,product_id):
     cart = Cart.objects.get(user=request.user)
     cart_item = get_object_or_404(CartItem,cart=cart,product=product_id)
@@ -68,7 +69,7 @@ def remove_cart(request,product_id):
 
     return redirect('cart')
 
-
+@login_required
 def delete_cart(request,product_id):
     cart = Cart.objects.get(user=request.user)
     cart_item = get_object_or_404(CartItem,cart=cart,product=product_id)
@@ -76,11 +77,11 @@ def delete_cart(request,product_id):
 
     return redirect('cart')
 
-
+@login_required
 def contact(request):
     return render(request,"shop/contact.html")
 
-
+@login_required
 def contacts(request):
     name = request.POST.get('name','')
     email = request.POST.get('email','')
@@ -97,6 +98,7 @@ def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+        print(f"Attempting to authenticate user with email: {email}")
 
         user = authenticate(request,email=email,password=password)
 
@@ -125,7 +127,7 @@ def logout_view(request):
 
         
 
-
+@login_required
 def checkout(request):
     cart = Cart.objects.get(user=request.user)
     items = cart.items.all()
@@ -134,6 +136,7 @@ def checkout(request):
     return render(request,"shop/checkout.html",context)
 
 
+@login_required
 def buy_decrease(request,product_id):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_item = CartItem.objects.get(product=product_id, cart=cart)
@@ -142,7 +145,7 @@ def buy_decrease(request,product_id):
     return render(request,"shop/buy_now.html",context)
 
   
-
+@login_required
 def buy_now(request,product_id):
     product = get_object_or_404(Product,id=product_id)
     cart,created = Cart.objects.get_or_create(user=request.user)
@@ -152,7 +155,7 @@ def buy_now(request,product_id):
     return render(request, "shop/buy_now.html",context)
 
 
-
+@login_required
 def add_product(request,product_id):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_item, item_created = CartItem.objects.get_or_create(product=product_id, cart=cart)
@@ -165,7 +168,7 @@ def add_product(request,product_id):
     cart_item.save()
     return redirect('buy_decrease',product_id=product_id)
 
-
+@login_required
 def remove_product(request,product_id):
     cart = Cart.objects.get(user=request.user)
     cart_item = get_object_or_404(CartItem, cart=cart, product=product_id)
