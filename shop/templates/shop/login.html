@@ -90,7 +90,7 @@ button {
                 {{ error }}
               </div>
             {% endif %}
-            <form action="login" method="POST"> {% csrf_token %}
+            <form action="/" method="POST"> {% csrf_token %}
                 <div class="form-group mt-3">
                     <label for="email" class = "form-label" style="background: orange; padding:5px;color:white !important;">Email address</label>
                     <input type="email" name="email" class="form-control" id="email" placeholder="Enter email">

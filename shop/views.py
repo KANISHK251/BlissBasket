@@ -88,7 +88,6 @@ def contacts(request):
     phone = request.POST.get('phone','')
     desc = request.POST.get('desc','')
     contact = Contact(name=name,email=email,phone=phone,desc=desc)
-    print(contact)
     contact.save()
     return HttpResponse('''Contact details added successfully 
                         <br><a href="{}" class="btn btn-primary mt-3" role="button">Continue Shopping</a>
@@ -123,7 +122,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('/')
 
         
 
