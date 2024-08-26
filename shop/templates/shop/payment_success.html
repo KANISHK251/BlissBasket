@@ -1,0 +1,28 @@
+{% extends 'shop/basic.html' %}
+
+{% block title%} Payment-Form {% endblock %}
+
+{% block body %}
+
+<form action="/payment-success/" method="POST">
+    <script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        data-key="{{ razorpay_merchant_key }}"
+        data-amount="{{ total_amount }}"
+        data-currency="INR"
+        data-order_id="{{ razorpay_orderid }}"
+        data-buttontext="Pay with Razorpay"
+        data-name="BlissBasket"
+        data-description="Test Transaction"
+        data-image="/media/shop/images/BlissBasket_logo.webp"
+        data-prefill.name="{{ order.name }}"
+        data-prefill.email="{{ order.email }}"
+        data-theme.color="#528FF0">
+    </script>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+</form>
+
+{% endblock %}
+
+
+

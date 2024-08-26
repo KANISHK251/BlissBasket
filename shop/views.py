@@ -193,7 +193,7 @@ def payment_success(request):
         address2 = request.POST.get('address2')
         city = request.POST.get('city')
         state = request.POST.get('state')
-        zipcode = request.POST.get('zip')
+        zipcode = request.POST.get('zipcode')
         phone = request.POST.get('phone')
         total = request.POST.get('total')
 
@@ -217,7 +217,7 @@ def payment_success(request):
         )
         order.save()
 
-        print(razorpay_order['id'])
+
         #Now we pass the order and Razorpay details to the frontend
         context = {
             'order' : order,
