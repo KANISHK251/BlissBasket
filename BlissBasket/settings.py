@@ -80,6 +80,9 @@ AUTHENTICATION_BACKENDS = [
     'shop.backends.EmailBackend',  # add this line
 ]
 
+RAZORPAY_API_KEY = 'rzp_test_l945lQSgnzZaWq'
+RAZORPAY_API_SECRET = 'hSUJ2hUCaCzQVO1io2mBJXgL'
+
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

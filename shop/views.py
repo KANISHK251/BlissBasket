@@ -3,9 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User 
 from django.contrib.auth.hashers import make_password
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+import razorpay
 from django.http import HttpResponse
 from django.urls import reverse
-from .models import Product,Cart,CartItem,Contact
+from .models import Product,Cart,CartItem,Contact,Order
 from  math import ceil
 
 
@@ -181,18 +184,51 @@ def remove_product(request,product_id):
     return redirect('buy_decrease',product_id=product_id)
 
 
+@csrf_exempt
+def payment_success(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        address = request.POST.get('address')
+        address2 = request.POST.get('address2')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        zipcode = request.POST.get('zip')
+        phone = request.POST.get('phone')
+        total = request.POST.get('total')
 
+        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+        #We convert the amount in paisa format as per Razorpay standard
+        amount = int(float(total)*100)
 
+        razorpay_order = client.order.create({'amount':amount, 'currency': 'INR', 'payment_capture': '1'})
 
+        #Now we save the save order details in the database
+        order = Order.objects.create(
+            name=name,
+            email=email,
+            address=address,
+            address2=address2,
+            city=city,
+            state=state,
+            zip_code=zipcode,
+            phone=phone,
+            razorpay_orderid = razorpay_order['id']
+        )
+        order.save()
 
-def tracker(request):
-    return HttpResponse("We are at tracker page")
-
-def search(request):
-    return HttpResponse("We are at search page")
-
-def prodView(request):
-    return HttpResponse("We are at productView page")
+        print(razorpay_order['id'])
+        #Now we pass the order and Razorpay details to the frontend
+        context = {
+            'order' : order,
+            'razorpay_orderid' : razorpay_order['id'],
+            'razorpay_merchant_key': settings.RAZORPAY_API_KEY,
+            'total_amount': amount,
+            'currency': 'INR',
+            }
+        return render(request,'shop/payment_success.html',context)
+    
+    return render(request,'shop/checkout.html')
 
 
 

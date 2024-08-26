@@ -32,7 +32,8 @@
     </div>
     <div class="col my-4">
         <h2>Step 2 - Enter Address & Other Details:</h2>
-        <form>
+        <form method="POST" action = "{% url 'payment_success' %}"> {% csrf_token %}
+            <input type="hidden" name="total" value="{{ total }}">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="inputname">Name</label>
