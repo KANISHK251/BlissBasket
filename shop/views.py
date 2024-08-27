@@ -256,7 +256,7 @@ def payment_verify(request):
             order.razorpay_paymentid = razorpay_paymentid
             order.status='Paid'
             order.save()
-            return HttpResponse('Payment is successfull and Your order details are',{order})
+            return HttpResponse(f'Payment is successful! Your order details are: {order}')
         except:
             return HttpResponse('payment is unsuccessful')
         
