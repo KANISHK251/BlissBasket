@@ -80,8 +80,8 @@ AUTHENTICATION_BACKENDS = [
     'shop.backends.EmailBackend',  # add this line
 ]
 
-RAZORPAY_API_KEY = 'rzp_test_l945lQSgnzZaWq'
-RAZORPAY_API_SECRET = 'hSUJ2hUCaCzQVO1io2mBJXgL'
+RAZORPAY_API_KEY = 'rzp_test_FQ48Np9O2Iw3ib'
+RAZORPAY_API_SECRET = 'mE0KV9fqCVAg5b6RcYHgb0WO'
 
 
 # Database

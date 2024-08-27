@@ -19,6 +19,7 @@ urlpatterns = [
     path('add_product/<int:product_id>/',views.add_product,name="add_product"),
     path('buy_decrease/<int:product_id>/',views.buy_decrease,name="buy_decrease"),
     path('payment_success',views.payment_success,name="payment_success"),
+    path('payment_verify',views.payment_verify,name="payment_verify")
     
 ]
 

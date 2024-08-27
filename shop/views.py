@@ -202,6 +202,7 @@ def payment_success(request):
         amount = int(float(total)*100)
 
         razorpay_order = client.order.create({'amount':amount, 'currency': 'INR', 'payment_capture': '1'})
+        print(razorpay_order)
 
         #Now we save the save order details in the database
         order = Order.objects.create(
@@ -229,6 +230,42 @@ def payment_success(request):
         return render(request,'shop/payment_success.html',context)
     
     return render(request,'shop/checkout.html')
+
+
+
+@csrf_exempt
+def payment_verify(request):
+    if request.method == "POST":
+        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+
+        
+
+        #Now we fetch the payment details from the razorpay/request
+        razorpay_orderid = request.POST.get('razorpay_order_id')
+        razorpay_paymentid = request.POST.get('razorpay_payment_id')
+        razorpay_signature = request.POST.get('razorpay_signature')
+
+        #We verify the payment siganture
+
+        params_dict = {
+            'razorpay_orderid' : razorpay_orderid,
+            'razorpay_paymentid' : razorpay_paymentid,
+            'razorpay_signature' : razorpay_signature
+        }
+
+        try:
+            client.utility.verify_payment_signature(params_dict)
+            order = Order.objects.get(razorpay_orderid=razorpay_orderid)
+            order.razorpay_paymentid = razorpay_paymentid
+            order.status='Paid'
+            order.save()
+            return HttpResponse('Payment is successfull and Your order details are',{order})
+        except:
+            return HttpResponse('payment is unsuccessful')
+        
+    return redirect('shop')
+
+
 
 
 
