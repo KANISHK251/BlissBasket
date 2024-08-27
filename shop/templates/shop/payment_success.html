@@ -72,7 +72,7 @@
             <h4>Complete Your Payment</h4>
             {% load custom_filters %}
             <p>Total Amount: ₹{{ total_amount|divide_by_100 }}</p>
-            <form action="payment-verify" method="POST">
+            <form action="{% url 'payment_verify' %}" method="POST">
                 <script
                     src="https://checkout.razorpay.com/v1/checkout.js"
                     data-key="{{ razorpay_merchant_key }}"

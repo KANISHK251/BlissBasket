@@ -202,7 +202,6 @@ def payment_success(request):
         amount = int(float(total)*100)
 
         razorpay_order = client.order.create({'amount':amount, 'currency': 'INR', 'payment_capture': '1'})
-        print(razorpay_order)
 
         #Now we save the save order details in the database
         order = Order.objects.create(
@@ -236,9 +235,7 @@ def payment_success(request):
 @csrf_exempt
 def payment_verify(request):
     if request.method == "POST":
-        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
-
-        
+        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET)) 
 
         #Now we fetch the payment details from the razorpay/request
         razorpay_orderid = request.POST.get('razorpay_order_id')
