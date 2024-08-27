@@ -204,17 +204,7 @@ def payment_success(request):
         razorpay_order = client.order.create({'amount':amount, 'currency': 'INR', 'payment_capture': '1'})
 
         #Now we save the save order details in the database
-        order = Order.objects.create(
-            name=name,
-            email=email,
-            address=address,
-            address2=address2,
-            city=city,
-            state=state,
-            zip_code=zipcode,
-            phone=phone,
-            razorpay_orderid = razorpay_order['id']
-        )
+        order = Order(name=name, email=email, address=address, address2=address2, city=city, state=state, zip_code=zipcode, phone=phone, razorpay_orderid = razorpay_order['id'])
         order.save()
 
 
@@ -256,7 +246,8 @@ def payment_verify(request):
             order.razorpay_paymentid = razorpay_paymentid
             order.status='Paid'
             order.save()
-            return HttpResponse(f'Payment is successful! Your order details are: {order}')
+            return HttpResponse('Payment is successfull and Your order details are',{order})
+        
         except:
             return HttpResponse('payment is unsuccessful')
         
