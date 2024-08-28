@@ -49,6 +49,7 @@ def add_to_cart(request,product_id):
         
     return redirect('cart')
 
+
 @login_required
 def cart(request):
     cart,created = Cart.objects.get_or_create(user=request.user)
@@ -57,6 +58,7 @@ def cart(request):
 
     context = {'cart_items': items,'total': total}
     return render(request,'shop/cart.html', context)
+
 
 
 @login_required
@@ -71,6 +73,7 @@ def remove_cart(request,product_id):
         cart_item.delete()
 
     return redirect('cart')
+
 
 @login_required
 def delete_cart(request,product_id):
