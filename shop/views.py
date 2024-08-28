@@ -99,6 +99,7 @@ def contacts(request):
                         <br><a href="{}" class="btn btn-primary mt-3" role="button">Continue Shopping</a>
                         '''.format(reverse('shop')))
 
+
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
