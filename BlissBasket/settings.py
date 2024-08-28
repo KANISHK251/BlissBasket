@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Blog',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +79,9 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # default
     'shop.backends.EmailBackend',  # add this line
 ]
+
+RAZORPAY_API_KEY = 'rzp_test_FQ48Np9O2Iw3ib'
+RAZORPAY_API_SECRET = 'mE0KV9fqCVAg5b6RcYHgb0WO'
 
 
 # Database

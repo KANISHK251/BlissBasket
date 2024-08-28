@@ -31,7 +31,16 @@ class Contact(models.Model):
     email = models.CharField(max_length=70, default="")
     phone = models.CharField(max_length=70, default="")
     desc = models.CharField(max_length=70, default="")
-    
 
-    def __str__(self):
-        return self.name
+class Order(models.Model):
+     name = models.CharField(max_length=100)
+     email = models.CharField(max_length=100)
+     address = models.CharField(max_length=100)
+     address2 = models.CharField(max_length=100, blank=True)
+     city = models.CharField(max_length=100)
+     state = models.CharField(max_length=100)
+     zip_code = models.CharField(max_length=10)
+     phone = models.CharField(max_length=10)
+     razorpay_orderid = models.CharField(max_length=100,unique=True)
+     razorpay_paymentid = models.CharField(max_length=100,blank=True, null=True)
+     status = models.CharField(max_length=10,default="pending")
