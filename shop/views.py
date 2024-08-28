@@ -206,6 +206,7 @@ def payment_success(request):
         #Now we save the save order details in the database
         order = Order(name=name, email=email, address=address, address2=address2, city=city, state=state, zip_code=zipcode, phone=phone, razorpay_orderid = razorpay_order['id'])
         order.save()
+        print(order.razorpay_orderid)
 
 
         #Now we pass the order and Razorpay details to the frontend
@@ -228,27 +229,35 @@ def payment_verify(request):
         client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET)) 
 
         #Now we fetch the payment details from the razorpay/request
-        razorpay_orderid = request.POST.get('razorpay_order_id')
-        razorpay_paymentid = request.POST.get('razorpay_payment_id')
+        razorpay_order_id = request.POST.get('razorpay_order_id')
+        razorpay_payment_id = request.POST.get('razorpay_payment_id')
         razorpay_signature = request.POST.get('razorpay_signature')
+
+        print(f"Razorpay Order ID from POST: {razorpay_order_id}")
+        print(f"Razorpay Payment ID from POST: {razorpay_payment_id}")
+        print(f"Razorpay Signature from POST: {razorpay_signature}")
 
         #We verify the payment siganture
 
         params_dict = {
-            'razorpay_orderid' : razorpay_orderid,
-            'razorpay_paymentid' : razorpay_paymentid,
+            'razorpay_order_id' : razorpay_order_id,
+            'razorpay_payment_id' : razorpay_payment_id,
             'razorpay_signature' : razorpay_signature
         }
 
         try:
             client.utility.verify_payment_signature(params_dict)
-            order = Order.objects.get(razorpay_orderid=razorpay_orderid)
-            order.razorpay_paymentid = razorpay_paymentid
+            order = Order.objects.get(razorpay_orderid=razorpay_order_id)
+            order.razorpay_paymentid = razorpay_payment_id
             order.status='Paid'
             order.save()
-            return HttpResponse('Payment is successfull and Your order details are',{order})
+            # Check if the order was successfully saved
+            order.refresh_from_db()
+            print(order)
+            return HttpResponse(f"Payment is Successful and Your order details are Order ID: {order.id}, Name: {order.name}, Email: {order.email}, Payment ID: {order.razorpay_paymentid}, Status: {order.status}")
         
-        except:
+        except Exception as e:
+            print(f"Error: {str(e)}")
             return HttpResponse('payment is unsuccessful')
         
     return redirect('shop')
