@@ -1,20 +1,33 @@
-# Step 1: Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM python:3.11-slim
 
-# Step 2: Set the working directory inside the container
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 WORKDIR /app
 
-# Step 3: Copy the requirements file to the working directory
+RUN apt-get update && \
+apt-get install -y --no-install-recommends netcat-openbsd && \
+rm -rf /var/lib/apt/lists/*
+
+# copy and install python dependencies
+
 COPY requirements.txt /app/
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Step 4: Install the dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+#Copy project files
 
-# Step 5: Copy the current directory contents into the container at /app
 COPY . /app/
 
-# Step 6: Expose the port Django runs on
+# entrypoint script (will wait for db and run migrations)
+
+COPY ./entrypoint.sh /entrypoint.sh
+
+RUN chmod +x entrypoint.sh
+
+#Expose application port
 EXPOSE 8000
 
-# Step 7: Run Django's migrations and start the server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["gunicorn", "BlissBasket.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]

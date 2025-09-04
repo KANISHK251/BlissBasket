@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:15
+    container_name: bliss_db
+    env_file: 
+      - .env_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - blissnet
+    
+    
+  web: 
+    build: .
+    container_name: bliss_web
+    volumes: 
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env_web
+    networks:
+      - blissnet
+
+volumes: 
+  db_data:
+
+networks:
+  blissnet:
+    driver: bridge
+    

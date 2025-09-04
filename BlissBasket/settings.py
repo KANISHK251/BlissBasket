@@ -87,12 +87,19 @@ RAZORPAY_API_SECRET = 'mE0KV9fqCVAg5b6RcYHgb0WO'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'bliss'),
+        'USER': os.environ.get('DB_USER', 'blissuser'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'blisspass'),
+        'HOST': os.environ.get('DB_HOST', 'db'),   # 'db' matches the service name in docker-compose
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'unsafe-secret')
+DEBUG = os.environ.get('DJANGO_DEBUG', '0') == '1'
 
 
 # Password validation
