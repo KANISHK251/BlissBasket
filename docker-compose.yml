@@ -13,13 +13,12 @@ services:
   web: 
     build: .
     container_name: bliss_web
-    volumes: 
-      - .:/app
     depends_on:
       - db
     env_file:
       - .env_web
     volumes:
+      - .:/app
       - ./static:/app/static    # matches STATIC_ROOT
       - ./media:/app/media      # matches MEDIA_ROOT
     networks:
