@@ -15,14 +15,24 @@ services:
     container_name: bliss_web
     volumes: 
       - .:/app
-    ports:
-      - "8000:8000"
     depends_on:
       - db
     env_file:
       - .env_web
     networks:
       - blissnet
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+    networks:
+      - blissnet
+
 
 volumes: 
   db_data:
