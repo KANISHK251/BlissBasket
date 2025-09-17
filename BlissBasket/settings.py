@@ -139,12 +139,20 @@ USE_TZ = True
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# URL for serving static files
+STATIC_URL = '/static/'
 
+# Folder where Django will collect all static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# Extra locations of static files (optional)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'shop', 'static'),  # if your app has extra static files
+]
+
+# Media files (user uploads)
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = 'media/'
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

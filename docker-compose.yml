@@ -19,6 +19,9 @@ services:
       - db
     env_file:
       - .env_web
+    volumes:
+      - ./static:/app/static    # matches STATIC_ROOT
+      - ./media:/app/media      # matches MEDIA_ROOT
     networks:
       - blissnet
 

@@ -22,3 +22,6 @@ urlpatterns = [
     path('payment_verify',views.payment_verify,name="payment_verify")    
 ]
 
+if settings.DEBUG:  # serve media in dev mode
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
