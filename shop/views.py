@@ -20,7 +20,7 @@ def index(request):
 
 @login_required
 def shop(request):
-    categories = ["Men's Fashion","Electronics","Kid's Fashion"]
+    categories = ["Men's Fashion","Kid's Fashion","Electronics"]
     context = []
     for category in categories:
         products = Product.objects.filter(category = category)  #retrive all products from the database
